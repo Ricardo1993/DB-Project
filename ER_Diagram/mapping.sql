@@ -7,7 +7,7 @@ create table group_chat(group_id serial primary key, group_name varchar(20),grou
 create table administrates(users_id integer references users(users_id),group_id integer references group_chat(group_id),primary key(users_id,group_id));
 create table member_of(users_id integer references users(users_id),group_id integer references group_chat(group_id),primary key(users_id,group_id));
 create table sent(users_id integer references users(users_id),message_id integer references message(message_id),primary key(users_id,message_id));
-create table reaction(users_id integer references users(users_id),message_id integer references message(message_id),primary key(users_id,message_id));
+create table reaction(users_id integer references users(users_id),message_id integer references message(message_id),reaction varchar(10),primary key(users_id,message_id));
 
 create table messages(message_id integer references message(message_id),group_id integer references group_chat(group_id),primary key(message_id,group_id));
 create table has(message_id integer references message(message_id), hashtag_id integer references hashtag(hashtag_id),primary key(message_id,hashtag_id));
