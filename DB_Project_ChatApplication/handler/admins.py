@@ -1,14 +1,14 @@
 from flask import jsonify, request
-from dao.member import MemberDAO
+from dao.admin import AdminDAO
 from dao.user import UserDAO
 from dao.chat import ChatDAO
 
-class MembershipHandler:
-    def getAllMemberships(self):
-        dao = MemberDAO()
+class AdminsHandler:
+    def getAllAdmins(self):
+        dao = AdminDAO()
         dao1 = UserDAO()
         dao2 = ChatDAO()
-        result = dao.getAllMemberships()
+        result = dao.getAllAdmins()
 
         mapped_result = []
         for r in result:
@@ -17,21 +17,21 @@ class MembershipHandler:
             r[0] = result2[1] + " " + result2[2]
             r[1] = result3[1]
             mapped_result.append(self.mapToDict(r))
-        return jsonify(Members=mapped_result)
+        return jsonify(Admins=mapped_result)
 
 
     def mapToDict(self, row):
         result = {}
-        result['user'] = row[0]
+        result['admin'] = row[0]
         result['chat'] = row[1]
         return result
 
 
-    def getMembershipByUID(self, user_id):
-        dao = MemberDAO()
+    def getChatsAdministratedByUser(self, user_id):
+        dao = AdminDAO()
         dao1 = UserDAO()
         dao2 = ChatDAO()
-        result = dao.getMembershipByUserID(user_id)
+        result = dao.getChatsAdministratedByUser(user_id)
         if result == None:
             return jsonify(Error="MEMBERSHIP NOT FOUND")
         else:
@@ -42,14 +42,14 @@ class MembershipHandler:
                 r[0] = result2[1] + " " + result2[2]
                 r[1] = result3[1]
                 mapped_result.append(self.mapToDict(r))
-            return jsonify(Members=mapped_result)
+            return jsonify(Admins=mapped_result)
 
 
-    def getMembershipByChatID(self, chat_id):
-        dao = MemberDAO()
+    def getAdminByChatID(self, chat_id):
+        dao = AdminDAO()
         dao1 = UserDAO()
         dao2 = ChatDAO()
-        result = dao.getMembershipByChatID(chat_id)
+        result = dao.getAdminsByChatID(chat_id)
         # print(result)
         if result == None:
             return jsonify(Error="MEMBERSHIP NOT FOUND")
@@ -61,5 +61,5 @@ class MembershipHandler:
                 r[0] = result2[1] + " " + result2[2]
                 r[1] = result3[1]
                 mapped_result.append(self.mapToDict(r))
-            return jsonify(Members=mapped_result)
+            return jsonify(Admins=mapped_result)
 

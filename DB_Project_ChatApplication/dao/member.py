@@ -20,12 +20,6 @@ class MemberDAO:
     def getAllMemberships(self):
         return self.data
 
-    # def getMembershipByID(self, id):
-    #     for r in self.data:
-    #         if id == r[0]:
-    #             return r
-    #         return None
-
     def getMembershipByChatID(self, chat_id):
         result = []
         for r in self.data:

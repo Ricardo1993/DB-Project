@@ -39,18 +39,12 @@ class ContactHandler:
         if result == None:
             return jsonify(Error="REPLY NOT FOUND")
         else:
-            # print(result)
             mapped_result = []
-            # usersPair = self.searchUserDAO(result)
-            # print(usersPair)
-            # mapped = self.mapToDict(usersPair)
-            # return jsonify(Contacts=mapped)            #usersPair = []
             for r in result:
                 usersPair = self.searchUserDAO(r)
                 print(usersPair)
                 mapped_result.append(self.mapToDict(usersPair))
 
-            print(usersPair)
             mapped = self.mapToDict(usersPair)
             return jsonify(Reply=mapped_result)
 

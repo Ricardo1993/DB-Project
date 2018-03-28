@@ -6,6 +6,8 @@ from handler.reactions import ReactionsHandler
 from handler.members import MembershipHandler
 from handler.replies import ReplyHandler
 from handler.contacts import ContactHandler
+from handler.admins import AdminsHandler
+from handler.hashtags import HashtagsHandler
 app = Flask(__name__)
 
 @app.route('/')
@@ -41,17 +43,24 @@ def getReplies():
     handler = ReplyHandler()
     return handler.getAllReplies()
 
-@app.route('/Users/Messages/Replies/<int:owner_id>')
-def getRepliesByOwnerID(owner_id):
+@app.route('/Messages/Replies/<int:message_id>')
+def getRepliesByID(message_id):
     handler = ReplyHandler()
-    return handler.findByOwnerID(owner_id)
+    return handler.findMessagesReplies(message_id)
 
+@app.route('/Messages/Hashtags/<int:message_id>')
+def getHashtagsInMessage(message_id):
+    handler = HashtagsHandler()
+    return handler.getHashtagsFromMessage(message_id)
+@app.route('/Hashtags/<int:hashtag_id>')
+def getMessageWithHashtag(hashtag_id):
+    handler = HashtagsHandler()
+    return handler.getMessagesWithHashtag(hashtag_id)
+@app.route('/Hashtags')
+def hashtags():
+    handler = HashtagsHandler()
+    return handler.getAllHashtags()
 
-
-@app.route('/Messages/Replies/<int:rep_id>')
-def getRepliesByID(rep_id):
-    handler = ReplyHandler()
-    return handler.getReplyByID(rep_id)
 
 @app.route('/Users/Contacts')
 def contacts():
@@ -73,6 +82,16 @@ def membershipsByUID(user_id):
     handler = MembershipHandler()
     return handler.getMembershipByUID(user_id)
 
+@app.route('/Users/Admins')
+def admins():
+    handler = AdminsHandler()
+    return handler.getAllAdmins()
+
+@app.route('/Users/Admins/<int:chat_id>')
+def adminOfChat(chat_id):
+    handler = AdminsHandler()
+    return handler.getChatsAdministratedByUser(chat_id)
+
 @app.route('/GroupChats')
 def chats():
     handler = ChatsHandler()
@@ -82,16 +101,6 @@ def chats():
 def getChatById(chat_id):
     handler = ChatsHandler()
     return handler.getChatByID(chat_id)
-
-
-# @app.route('/GroupChats/Messages')
-# def messages():
-#     handler = MessageHandler()
-#     return handler.getAllMessages()
-
-# @app.route('/GroupChats/Messages/<int:message_id>')
-# def getMessageById(message_id):
-#     return MessageHandler().getMessageByID(message_id)
 
 @app.route('/GroupChats/Messages/<int:chat_id>')
 def getChatMessages(chat_id):
@@ -108,21 +117,20 @@ def membershipsByChatID(chat_id):
     handler = MembershipHandler()
     return handler.getMembershipByChatID(chat_id)
 
-
+@app.route('/GroupChats/Admins/<int:user_id>')
+def chatsByAdmin(user_id):
+    handler = AdminsHandler()
+    return handler.getChatsAdministratedByUser(user_id)
 
 @app.route('/Users/Reactions')
 def getReactions():
     handler = ReactionsHandler()
     return handler.getAllReactions()
 
-
 @app.route('/Users/Reactions/<int:user_id>')
 def getReactionsByID(user_id):
     handler = ReactionsHandler()
     return handler.getReactionsByUserID(user_id)
-
-
-
 
 
 if __name__ == '__main__':

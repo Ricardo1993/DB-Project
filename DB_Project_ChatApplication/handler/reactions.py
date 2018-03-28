@@ -29,12 +29,3 @@ class ReactionsHandler:
                 mapped_result.append(self.mapToDict(r))
             return jsonify(Reaction=mapped_result)
 
-
-                # def getReactionsByID(self, id):
-    #     dao = ReactionDAO()
-    #     result = dao.getReactionById(id)
-    #     if result == None:
-    #         return jsonify(Error="REACTION NOT FOUND")
-    #     else:
-    #         mapped = self.mapToDict(result)
-    #         return jsonify(Reaction=mapped)
