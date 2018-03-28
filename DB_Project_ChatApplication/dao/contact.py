@@ -1,5 +1,6 @@
 class ContactDAO:
     def __init__(self):
+        # C = [user, contact]
         C1 = [28, 100]
         C2 = [100, 28]
         C3 = [28, 134]
@@ -25,14 +26,11 @@ class ContactDAO:
     def getAllContactRelations(self):
         return self.data
 
-    # def getContactsOfUserID(self, user_id):
-    #     dao = MemberDAO()
-    #     result = dao.getMembershipByUserID(user_id)
-    #     if result == None:
-    #         return jsonify(Error="MEMBERSHIP NOT FOUND")
-    #     else:
-    #         mapped_result = []
-    #         for r in result:
-    #             mapped_result.append(self.mapToDict(r))
-    #         return jsonify(Members=mapped_result)
+    def getContactsByUserId(self, id):
+        print(id)
+        result = []
+        for r in self.data:
+            if id == r[0]:
+                result.append(r)
+        return result
 

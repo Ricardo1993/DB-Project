@@ -21,7 +21,6 @@ class ReplyDAO:
         self.data.append(Re6)
 
 
-
     def getAllReplies(self):
         return self.data
 

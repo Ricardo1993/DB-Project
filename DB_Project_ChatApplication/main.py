@@ -5,7 +5,7 @@ from handler.messages import MessageHandler
 from handler.reactions import ReactionsHandler
 from handler.members import MembershipHandler
 from handler.replies import ReplyHandler
-
+from handler.contacts import ContactHandler
 app = Flask(__name__)
 
 @app.route('/')
@@ -48,11 +48,20 @@ def getRepliesByOwnerID(owner_id):
 
 
 
-@app.route('Messages/Replies/<int:rep_id>')
+@app.route('/Messages/Replies/<int:rep_id>')
 def getRepliesByID(rep_id):
     handler = ReplyHandler()
     return handler.getReplyByID(rep_id)
 
+@app.route('/Users/Contacts')
+def contacts():
+    handler = ContactHandler()
+    return handler.getAllContacts()
+
+@app.route('/Users/Contacts/<int:user_id>')
+def getContactsOfUser(user_id):
+    handler = ContactHandler()
+    return handler.getContactsByUserID(user_id)
 
 @app.route('/Users/Memberships')
 def memberships():
