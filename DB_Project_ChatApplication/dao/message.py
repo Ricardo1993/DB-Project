@@ -28,6 +28,13 @@ class MessageDAO:
     def searchByChatId(self, chat_id):
         result = []
         for r in self.data:
-            if chat_id == r[7]:
+            if chat_id == r[4]:
+                result.append(r)
+        return result
+
+    def searchByUserId(self, user_id):
+        result = []
+        for r in self.data:
+            if user_id == r[3]:
                 result.append(r)
         return result

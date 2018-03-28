@@ -42,3 +42,25 @@ class MessageHandler:
             for r in result:
                 mapped_result.append(self.mapToDict(r))
             return jsonify(Messages=mapped_result)
+
+    def findUserMessages(self, user_id):
+        dao = MessageDAO()
+        result = dao.searchByUserId(user_id)
+        if result == None:
+            return jsonify(Error="CHAT NOT FOUND")
+        else:
+            mapped_result = []
+            for r in result:
+                mapped_result.append(self.mapToDict(r))
+            return jsonify(Messages=mapped_result)
+
+                    # def findChatMessages(self, chat_id):
+    #     dao = MessageDAO()
+    #     result = dao.searchByChatId(chat_id)
+    #     if result == None:
+    #         return jsonify(Error="CHAT NOT FOUND")
+    #     else:
+    #         mapped_result = []
+    #         for r in result:
+    #             mapped_result.append(self.mapToDict(r))
+    #         return jsonify(Messages=mapped_result)
