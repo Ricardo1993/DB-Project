@@ -58,5 +58,6 @@ class HashtagsHandler:
     def mapToDict2(self, row):
         result = {}
         result['hashtag'] = row[1]
+        result['date_created'] = row[2]
 
         return result
