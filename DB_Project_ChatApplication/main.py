@@ -87,11 +87,6 @@ def admins():
     handler = AdminsHandler()
     return handler.getAllAdmins()
 
-@app.route('/Users/Admins/<int:chat_id>')
-def adminOfChat(chat_id):
-    handler = AdminsHandler()
-    return handler.getChatsAdministratedByUser(chat_id)
-
 @app.route('/GroupChats')
 def chats():
     handler = ChatsHandler()
@@ -105,6 +100,7 @@ def getChatById(chat_id):
 @app.route('/GroupChats/Messages/<int:chat_id>')
 def getChatMessages(chat_id):
     handler = MessageHandler()
+    print(handler.findChatMessages(chat_id))
     return handler.findChatMessages(chat_id)
 
 @app.route('/GroupChats/Messages/Replies/<int:message_id>')
@@ -132,6 +128,15 @@ def getReactionsByID(user_id):
     handler = ReactionsHandler()
     return handler.getReactionsByUserID(user_id)
 
+@app.route('/Messages/Reactions/<int:message_id>')
+def getReactionsByMessageID(message_id):
+    handler = ReactionsHandler()
+    return handler.getReactionsByMessageID(message_id)
+
+@app.route('/GroupChats/Messages/<int:chat_id>/<int:user_id>')
+def getChatMessagesOfUser(chat_id, user_id):
+    handler = MessageHandler()
+    return handler.findChatMessagesByUser(chat_id, user_id)
 
 if __name__ == '__main__':
     app.run()

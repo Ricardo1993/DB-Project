@@ -23,7 +23,7 @@ class HashtagsHandler:
         message = messageDAO.getMessageById(message_id)
         mapped = []
         if result == None:
-            return jsonify(Error="MESSAGE NOT FOUND")
+            return jsonify(Error="HASHTAG NOT FOUND")
         else:
             for r in result:
                 r[0] = message[1]

@@ -33,7 +33,7 @@ class AdminsHandler:
         dao2 = ChatDAO()
         result = dao.getChatsAdministratedByUser(user_id)
         if result == None:
-            return jsonify(Error="MEMBERSHIP NOT FOUND")
+            return jsonify(Error="CHAT NOT FOUND")
         else:
             mapped_result = []
             for r in result:
@@ -52,7 +52,7 @@ class AdminsHandler:
         result = dao.getAdminsByChatID(chat_id)
         # print(result)
         if result == None:
-            return jsonify(Error="MEMBERSHIP NOT FOUND")
+            return jsonify(Error="ADMIN NOT FOUND")
         else:
             mapped_result = []
             for r in result:

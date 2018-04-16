@@ -38,9 +38,11 @@ class ReactionDAO:
                result.append(r);
         return result
 
-            # def getReactionById(self, id):
-    #     for r in self.data:
-    #         if id == r[0]:
-    #             return r
-    #     return None
+
+    def getReactionByMessageId(self, mid):
+        result = []
+        for r in self.data:
+            if mid == r[0]:
+               result.append(r);
+        return result
 

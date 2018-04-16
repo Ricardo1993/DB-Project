@@ -36,16 +36,18 @@ class ContactHandler:
     def getContactsByUserID(self, id):
         dao = ContactDAO()
         result = dao.getContactsByUserId(id)
+        print(result)
         if result == None:
-            return jsonify(Error="REPLY NOT FOUND")
+            return jsonify(Error="CONTACT NOT FOUND")
         else:
             mapped_result = []
             for r in result:
                 usersPair = self.searchUserDAO(r)
                 print(usersPair)
                 mapped_result.append(self.mapToDict(usersPair))
-
-            mapped = self.mapToDict(usersPair)
-            return jsonify(Reply=mapped_result)
+            if mapped_result == []:
+                return jsonify(Error="USER HAS NO CONTACT")
+            # mapped = self.mapToDict(usersPair)
+            return jsonify(Contact=mapped_result)
 
 
