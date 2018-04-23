@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
 from handler.users import UsersHandler
 from handler.chats import ChatsHandler
 from handler.messages import MessageHandler
@@ -8,15 +8,37 @@ from handler.replies import ReplyHandler
 from handler.contacts import ContactHandler
 from handler.admins import AdminsHandler
 from handler.hashtags import HashtagsHandler
+from handler.parts import PartsHandler
+
+import psycopg2
+
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return "DB Project"
+
+
+# @app.route('/')
+# @app.route('/<user>')
+# def index(user=None):
+#     return render_template("user.html", user=user)
+# # def home():
+# #     return "DB Project"
+#
+# # @app.route('/bacon', methods=['GET', 'POST'])
+# # def index():
+# #     return "Method used: %s" % request.method
+# @app.route('/profile/<name>')
+# def profile(name):
+#     return render_template("profile.html", name=name)
+
 
 @app.route('/Home')
 def welcome():
     return "Welcome to DB Chat!"
+
+@app.route('/Parts')
+def parts():
+    handler = PartsHandler()
+    return handler.getAllParts()
 
 @app.route('/Users')
 def users():
@@ -27,11 +49,20 @@ def users():
 def getUserById(user_id):
     handler = UsersHandler()
     return handler.getUserByID(user_id)
+# @app.route('/Users/<string:user_name>')
+# def getUserByName(user_name):
+#     handler = UsersHandler()
+#     return handler.getUserByName(user_name)
 
 @app.route('/Messages')
 def getMessages():
     handler = MessageHandler()
     return handler.getAllMessages()
+
+@app.route('/Messages/<int:message_id>')
+def getMessageById(message_id):
+    handler = MessageHandler()
+    return handler.getMessageByID(message_id)
 
 @app.route('/Users/Messages/<int:user_id>')
 def getMessagesByUID(user_id):
@@ -56,6 +87,11 @@ def getHashtagsInMessage(message_id):
 def getMessageWithHashtag(hashtag_id):
     handler = HashtagsHandler()
     return handler.getMessagesWithHashtag(hashtag_id)
+@app.route('/Hashtags/<string:hashtag_text>')
+def hashtagText(hashtag_text):
+    handler = HashtagsHandler()
+    return handler.getHashtagsByText(hashtag_text)
+
 @app.route('/Hashtags')
 def hashtags():
     handler = HashtagsHandler()
@@ -100,7 +136,7 @@ def getChatById(chat_id):
 @app.route('/GroupChats/Messages/<int:chat_id>')
 def getChatMessages(chat_id):
     handler = MessageHandler()
-    print(handler.findChatMessages(chat_id))
+    # print(handler.findChatMessages(chat_id))
     return handler.findChatMessages(chat_id)
 
 @app.route('/GroupChats/Messages/Replies/<int:message_id>')
@@ -132,6 +168,25 @@ def getReactionsByID(user_id):
 def getReactionsByMessageID(message_id):
     handler = ReactionsHandler()
     return handler.getReactionsByMessageID(message_id)
+@app.route('/Messages/Reactions/<int:message_id>/like')
+def likes(message_id):
+    handler = ReactionsHandler()
+    return handler.getMessageLikes(message_id)
+@app.route('/Messages/Reactions/<int:message_id>/dislike')
+def dislikes(message_id):
+    handler = ReactionsHandler()
+    return handler.getMessageDislikes(message_id)
+
+@app.route('/Messages/Reactions/<int:message_id>/like/count')
+def likesCount(message_id):
+    handler = ReactionsHandler()
+    return handler.getMessageLikesCount(message_id)
+@app.route('/Messages/Reactions/<int:message_id>/dislike/count')
+def dislikesCount(message_id):
+    handler = ReactionsHandler()
+    return handler.getMessageDislikesCount(message_id)
+
+
 
 @app.route('/GroupChats/Messages/<int:chat_id>/<int:user_id>')
 def getChatMessagesOfUser(chat_id, user_id):

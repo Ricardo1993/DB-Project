@@ -49,15 +49,38 @@ class HashtagsHandler:
             return jsonify(Messages=mapped)
 
 
+    def getHashtagsByText(self, hashtag_text):
+        hashtagDAO = HashtagDAO()
+
+        result = hashtagDAO.getAllHashtags()
+        mapped = []
+
+        if result == None:
+            return jsonify(Error="HASHTAG NOT FOUND")
+        else:
+            for r in result:
+                if r[1] == '#' + hashtag_text:
+                    r[0] = hashtag_text
+                    # r[1] = r[1]
+                    mapped.append(self.mapToDict2(r))
+
+            print(mapped)
+            return jsonify(Hashtags=mapped)
+
+
+
     def mapToDict(self, row):
         result = {}
         result['message'] = row[0]
         result['hashtag'] = row[1]
 
         return result
+
     def mapToDict2(self, row):
         result = {}
         result['hashtag'] = row[1]
         result['date_created'] = row[2]
 
         return result
+
+
