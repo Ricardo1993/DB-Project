@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from dao.reply import ReplyDAO
-from dao.user import UserDAO
+from dao.users import UsersDAO
 from dao.message import MessageDAO
 from dao.chat import ChatDAO
 
@@ -9,7 +9,7 @@ class ReplyHandler:
         dao = ReplyDAO()
         dao1 = MessageDAO()
         dao2 = MessageDAO()
-        userDAO = UserDAO()
+        userDAO = UsersDAO()
         chatDAO = ChatDAO()
         result = dao.getAllReplies()
         mapped_result = []
@@ -54,7 +54,7 @@ class ReplyHandler:
         dao = ReplyDAO()
         dao1 = MessageDAO()
         dao2 = MessageDAO()
-        userDAO = UserDAO()
+        userDAO = UsersDAO()
         chatDAO = ChatDAO()
         result = dao.getAllReplies()
         mapped_result = []

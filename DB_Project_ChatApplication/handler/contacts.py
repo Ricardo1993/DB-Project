@@ -1,9 +1,10 @@
-from flask import jsonify, request
+from flask import jsonify
 from dao.contact import ContactDAO
-from dao.user import UserDAO
+from dao.users import UsersDAO
+
 class ContactHandler:
     def searchUserDAO(self, r):
-        dao = UserDAO()
+        dao = UsersDAO()
 
         userByID = dao.getUserById(r[0])
         print(userByID)

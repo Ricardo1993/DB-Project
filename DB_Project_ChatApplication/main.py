@@ -1,19 +1,18 @@
 from flask import Flask, request, render_template
 from handler.users import UsersHandler
-from handler.chats import ChatsHandler
+from handler.group_chat import ChatsHandler
 from handler.messages import MessageHandler
-from handler.reactions import ReactionsHandler
-from handler.members import MembershipHandler
+from handler.reaction import ReactionHandler
+from handler.member_of import MembershipHandler
 from handler.replies import ReplyHandler
 from handler.contacts import ContactHandler
-from handler.admins import AdminsHandler
-from handler.hashtags import HashtagsHandler
-from handler.parts import PartsHandler
+from handler.administrates import AdminsHandler
+from handler.hashtag import HashtagsHandler
+
 
 import psycopg2
 
 app = Flask(__name__)
-
 
 
 # @app.route('/')
@@ -34,11 +33,6 @@ app = Flask(__name__)
 @app.route('/Home')
 def welcome():
     return "Welcome to DB Chat!"
-
-@app.route('/Parts')
-def parts():
-    handler = PartsHandler()
-    return handler.getAllParts()
 
 @app.route('/Users')
 def users():
@@ -156,34 +150,34 @@ def chatsByAdmin(user_id):
 
 @app.route('/Users/Reactions')
 def getReactions():
-    handler = ReactionsHandler()
+    handler = ReactionHandler()
     return handler.getAllReactions()
 
 @app.route('/Users/Reactions/<int:user_id>')
 def getReactionsByID(user_id):
-    handler = ReactionsHandler()
+    handler = ReactionHandler()
     return handler.getReactionsByUserID(user_id)
 
 @app.route('/Messages/Reactions/<int:message_id>')
 def getReactionsByMessageID(message_id):
-    handler = ReactionsHandler()
+    handler = ReactionHandler()
     return handler.getReactionsByMessageID(message_id)
 @app.route('/Messages/Reactions/<int:message_id>/like')
 def likes(message_id):
-    handler = ReactionsHandler()
+    handler = ReactionHandler()
     return handler.getMessageLikes(message_id)
 @app.route('/Messages/Reactions/<int:message_id>/dislike')
 def dislikes(message_id):
-    handler = ReactionsHandler()
+    handler = ReactionHandler()
     return handler.getMessageDislikes(message_id)
 
 @app.route('/Messages/Reactions/<int:message_id>/like/count')
 def likesCount(message_id):
-    handler = ReactionsHandler()
+    handler = ReactionHandler()
     return handler.getMessageLikesCount(message_id)
 @app.route('/Messages/Reactions/<int:message_id>/dislike/count')
 def dislikesCount(message_id):
-    handler = ReactionsHandler()
+    handler = ReactionHandler()
     return handler.getMessageDislikesCount(message_id)
 
 
