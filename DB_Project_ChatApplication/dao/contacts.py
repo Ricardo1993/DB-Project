@@ -1,7 +1,7 @@
 from config.dbconfig import pg_config
 import psycopg2
 
-class HashtagDAO:
+class ContactDAO:
     def __init__(self):
         connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
                                                             pg_config['user'],
@@ -9,30 +9,22 @@ class HashtagDAO:
 
         self.conn = psycopg2._connect(connection_url)
 
-    def getAllHashtags(self):
+
+    def getAllContactsRelations(self):
         cursor = self.conn.cursor()
-        query = "select * from hashtag;"
+        query = "select * from contacts;"
         cursor.execute(query)
         result = []
         for row in cursor:
-
             result.append(row)
         return result
 
-    def getHashtagById(self, hashtag_id):
+    def getContactsByUserId(self, users_id):
         cursor = self.conn.cursor()
-        query = "select * from hashtag where hashtag.hashtag_id = %s;"
-        cursor.execute(query, (hashtag_id,))
+        query = "select * from contacts where super_id = %s;"
+        cursor.execute(query, (users_id,))
         result = []
         for row in cursor:
             result.append(row)
         return result
 
-    def getHashtagByText(self,hashtag_text):
-        cursor = self.conn.cursor()
-        query = "select * from hashtag where hashtag.hashtag_text = %s;"
-        cursor.execute(query, (hashtag_text,))
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result

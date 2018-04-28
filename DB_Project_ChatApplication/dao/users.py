@@ -25,3 +25,12 @@ class UsersDAO:
         result = cursor.fetchone()
         return result
 
+    def getUserByName(self, first_name, last_name):
+        cursor = self.conn.cursor()
+        query = "select * from users where first_name = %s and last_name = %s;"
+        cursor.execute(query,(first_name,last_name,))
+        result = cursor.fetchone()
+        return result
+
+
+

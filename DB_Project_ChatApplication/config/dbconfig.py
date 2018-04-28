@@ -3,7 +3,7 @@
 
 
 pg_config = {
-    'user' : 'postgres',
-    'passwd' : 'postgres',
+    'user' : 'appusr',
+    'passwd' : 'appusr1',
     'dbname' : 'appdb'
 }

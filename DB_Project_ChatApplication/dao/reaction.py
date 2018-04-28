@@ -1,48 +1,75 @@
+from config.dbconfig import pg_config
+import psycopg2
+
 class ReactionDAO:
     def __init__(self):
-        # R = [r_id, message_id (foreign key), user_id, 'like/dislike']
-        R1 = [1, 28, 'like']
-        R2 = [1, 100, 'like']
-        R3 = [1, 200, 'dislike']
-        R4 = [1, 134, 'like']
-        R5 = [2, 200, 'like']
-        R6 = [2, 28, 'dislike']
-        R7 = [2, 100, 'dislike']
-        R8 = [2, 134, 'dislike']
-        R9 = [3, 200, 'dislike']
-        R10 = [3, 100, 'like']
-        R11 = [4, 100, 'like']
-        R12 = [4, 134, 'like']
+        connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
+                                                            pg_config['user'],
+                                                            pg_config['passwd'])
 
-        self.data = []
-        self.data.append(R1)
-        self.data.append(R2)
-        self.data.append(R3)
-        self.data.append(R4)
-        self.data.append(R5)
-        self.data.append(R6)
-        self.data.append(R7)
-        self.data.append(R8)
-        self.data.append(R9)
-        self.data.append(R10)
-        self.data.append(R11)
-        self.data.append(R12)
+        self.conn = psycopg2._connect(connection_url)
 
     def getAllReactions(self):
-        return self.data
-
-    def getReactionByUserId(self, uid):
+        cursor = self.conn.cursor()
+        query = "select * from reaction;"
+        cursor.execute(query)
         result = []
-        for r in self.data:
-            if uid == r[1]:
-               result.append(r);
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReactionsByUserId(self, users_id):
+        cursor = self.conn.cursor()
+        query = "select * from reaction where users_id = %s;"
+        cursor.execute(query,(users_id,))
+        result = []
+        for row in cursor:
+            result.append(row)
         return result
 
 
-    def getReactionByMessageId(self, mid):
+    def getReactionsToMessageId(self, message_id):
+        cursor = self.conn.cursor()
+        query = "select * from reaction where message_id = %s;"
+        cursor.execute(query, (message_id,))
         result = []
-        for r in self.data:
-            if mid == r[0]:
-               result.append(r);
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getLikesToMessageId(self, message_id):
+        cursor = self.conn.cursor()
+        query = "select * from reaction where message_id = %s and reaction = 'like' ;"
+        cursor.execute(query, (message_id,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getDislikesToMessageId(self, message_id):
+        cursor = self.conn.cursor()
+        query = "select * from reaction where message_id = %s and reaction = 'dislike';"
+        cursor.execute(query, (message_id,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getLikesCountToMessageId(self, message_id):
+        cursor = self.conn.cursor()
+        query = "select count(*) from reaction where message_id = %s and reaction = 'like';"
+        cursor.execute(query, (message_id,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getDislikesCountToMessageId(self, message_id):
+        cursor = self.conn.cursor()
+        query = "select count(*) from reaction where message_id = %s and reaction = 'dislike';"
+        cursor.execute(query, (message_id,))
+        result = []
+        for row in cursor:
+            result.append(row)
         return result
 
