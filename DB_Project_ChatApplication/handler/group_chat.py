@@ -1,12 +1,12 @@
 from flask import jsonify
-from dao.chat import ChatDAO
+from dao.group_chat import Group_ChatDAO
 
 
 
 class ChatsHandler:
 
     def getAllChats(self):
-        dao = ChatDAO()
+        dao = Group_ChatDAO()
         result = dao.getAllChats()
         mapped_result = []
         for r in result:
@@ -24,7 +24,7 @@ class ChatsHandler:
 
 
     def getChatByID(self, id):
-        dao = ChatDAO()
+        dao = Group_ChatDAO()
         result = dao.getChatById(id)
         if result == None:
             return jsonify(Error="CHAT NOT FOUND")
@@ -33,7 +33,7 @@ class ChatsHandler:
             return jsonify(Chat=mapped)
 
     def findChat(self, name):
-        dao = ChatDAO()
+        dao = Group_ChatDAO()
         result = dao.searchByChatName(name)
         if result == None:
             return jsonify(Error="CHAT NOT FOUND")

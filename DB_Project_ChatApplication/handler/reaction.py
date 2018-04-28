@@ -4,6 +4,31 @@ from dao.message import MessageDAO
 from dao.users import UsersDAO
 
 class ReactionHandler:
+
+    def mapToDict(self, row):
+        result = {}
+        # result['r_id'] = row[0]
+        result['message_reactedTo'] = row[0]
+        result['user_reactor'] = row[1]
+        result['reaction'] = row[2]  # like/dislike
+        return result
+
+    def mapToDict2(self, row):
+        result = {}
+        # result['r_id'] = row[0]
+        result['message_reactedTo'] = row[0]
+        # result['user_reactor'] = row[1]
+        result['num_of_likes'] = row[1]  # like/dislike
+        return result
+
+    def mapToDict3(self, row):
+        result = {}
+        # result['r_id'] = row[0]
+        result['message_reactedTo'] = row[0]
+        # result['user_reactor'] = row[1]
+        result['num_of_dislikes'] = row[1]  # like/dislike
+        return result
+
     def getAllReactions(self):
         dao = ReactionDAO()
         dao1 = MessageDAO()
@@ -12,137 +37,125 @@ class ReactionHandler:
         result = dao.getAllReactions()
         mapped_result = []
         for r in result:
-            r[0] = dao1.getMessageById(r[0])[1]
-            r[1] = dao2.getUserById(r[1])[1] + ' ' + dao2.getUserById(r[1])[2]
-            mapped_result.append(self.mapToDict(r))
+            mapped_info = []
+            user = dao2.getUserById(r[0])
+            message = dao1.getMessageById(r[1])
+            mapped_info.append(message[1]) # message text in which it reacted
+            mapped_info.append(user[1] + ' ' + user[2])
+            mapped_info.append(r[2])
+            mapped_result.append(self.mapToDict(mapped_info))
         return jsonify(Reactions=mapped_result)
 
-    def mapToDict(self, row):
-        result = {}
-       # result['r_id'] = row[0]
-        result['message_reactedTo'] = row[0]
-        result['user_reactor'] = row[1]
-        result['reaction'] = row[2]  # like/dislike
-        return result
 
-    def mapToDict2(self, row):
-        result = {}
-       # result['r_id'] = row[0]
-        result['message_reactedTo'] = row[0]
-        # result['user_reactor'] = row[1]
-        result['num_of_likes'] = row[1]  # like/dislike
-        return result
-
-    def mapToDict3(self, row):
-        result = {}
-       # result['r_id'] = row[0]
-        result['message_reactedTo'] = row[0]
-        # result['user_reactor'] = row[1]
-        result['num_of_dislikes'] = row[1]  # like/dislike
-        return result
-
-
-    def getReactionsByUserID(self, uid):
+    def getReactionsByUserID(self, users_id):
         dao = ReactionDAO()
         dao1 = MessageDAO()
         dao2 = UsersDAO()
-        result = dao.getReactionByUserId(uid)
+        result = dao.getReactionsByUserId(users_id)
         if result == None:
             return jsonify(Error="REACTION NOT FOUND")
         else:
             mapped_result = []
             for r in result:
-                r[0] = dao1.getMessageById(r[0])[1]
-                r[1] = dao2.getUserById(r[1])[1] + ' ' + dao2.getUserById(r[1])[2]
-                mapped_result.append(self.mapToDict(r))
-            return jsonify(Reaction=mapped_result)
+                mapped_info = []
+                user = dao2.getUserById(r[0])
+                message = dao1.getMessageById(r[1])
+                mapped_info.append(message[1])  # message text in which it reacted
+                mapped_info.append(user[1] + ' ' + user[2])
+                mapped_info.append(r[2])
+                mapped_result.append(self.mapToDict(mapped_info))
+            return jsonify(Reactions=mapped_result)
 
-    def getMessageLikes(self, mid):
+    def getReactionsByMessageID(self, message_id):
         dao = ReactionDAO()
         dao1 = MessageDAO()
         dao2 = UsersDAO()
-        result = dao.getReactionByMessageId(mid)
+        result = dao.getReactionsToMessageId(message_id)
         if result == None:
             return jsonify(Error="REACTION NOT FOUND")
         else:
             mapped_result = []
             for r in result:
-                if r[2] == 'like':
-                    r[0] = dao1.getMessageById(r[0])[1]
-                    r[1] = dao2.getUserById(r[1])[1] + ' ' + dao2.getUserById(r[1])[2]
-                    mapped_result.append(self.mapToDict(r))
-            return jsonify(Reaction=mapped_result)
+                mapped_info = []
+                user = dao2.getUserById(r[0])
+                message = dao1.getMessageById(r[1])
+                mapped_info.append(message[1])  # message text in which it reacted
+                mapped_info.append(user[1] + ' ' + user[2])
+                mapped_info.append(r[2])
+                mapped_result.append(self.mapToDict(mapped_info))
+            return jsonify(Reactions=mapped_result)
 
-    def getMessageDislikes(self, mid):
+    def getMessageLikes(self, message_id):
         dao = ReactionDAO()
         dao1 = MessageDAO()
         dao2 = UsersDAO()
-        result = dao.getReactionByMessageId(mid)
+        result = dao.getLikesToMessageId(message_id)
         if result == None:
             return jsonify(Error="REACTION NOT FOUND")
         else:
             mapped_result = []
             for r in result:
-                if r[2] == 'dislike':
-                    r[0] = dao1.getMessageById(r[0])[1]
-                    r[1] = dao2.getUserById(r[1])[1] + ' ' + dao2.getUserById(r[1])[2]
-                    mapped_result.append(self.mapToDict(r))
-            return jsonify(Reaction=mapped_result)
+                mapped_info = []
+                user = dao2.getUserById(r[0])
+                message = dao1.getMessageById(r[1])
+                mapped_info.append(message[1])  # message text in which it reacted
+                mapped_info.append(user[1] + ' ' + user[2])
+                mapped_info.append(r[2])
+                mapped_result.append(self.mapToDict(mapped_info))
+            return jsonify(Reactions=mapped_result)
 
-
-
-    def getMessageLikesCount(self, mid):
+    def getMessageDislikes(self, message_id):
         dao = ReactionDAO()
         dao1 = MessageDAO()
         dao2 = UsersDAO()
-        result = dao.getReactionByMessageId(mid)
-        if result == None:
-            return jsonify(Error="REACTION NOT FOUND")
-        else:
-            mapped_result = []
-            count = 0
-            for r in result:
-                if r[2] == 'like':
-                    count = count + 1
-
-            new_result = [dao1.getMessageById(mid)[1], count]
-            mapped_result.append(self.mapToDict2(new_result))
-
-
-            return jsonify(Reaction=mapped_result)
-
-    def getMessageDislikesCount(self, mid):
-        dao = ReactionDAO()
-        dao1 = MessageDAO()
-        dao2 = UsersDAO()
-        result = dao.getReactionByMessageId(mid)
-        if result == None:
-            return jsonify(Error="REACTION NOT FOUND")
-        else:
-            mapped_result = []
-            count = 0
-            text = ''
-
-            for r in result:
-                if r[2] == 'dislike':
-                    count = count + 1
-
-            new_result = [dao1.getMessageById(mid)[1], count]
-            mapped_result.append(self.mapToDict3(new_result))
-
-            return jsonify(Reaction=mapped_result)
-
-    def getReactionsByMessageID(self, mid):
-        dao = ReactionDAO()
-        dao1 = MessageDAO()
-        dao2 = UsersDAO()
-        result = dao.getReactionByMessageId(mid)
+        result = dao.getDislikesToMessageId(message_id)
         if result == None:
             return jsonify(Error="REACTION NOT FOUND")
         else:
             mapped_result = []
             for r in result:
-                r[0] = dao1.getMessageById(r[0])[1]
-                r[1] = dao2.getUserById(r[1])[1] + ' ' + dao2.getUserById(r[1])[2]
-                mapped_result.append(self.mapToDict(r))
+                mapped_info = []
+                user = dao2.getUserById(r[0])
+                message = dao1.getMessageById(r[1])
+                mapped_info.append(message[1])  # message text in which it reacted
+                mapped_info.append(user[1] + ' ' + user[2])
+                mapped_info.append(r[2])
+                mapped_result.append(self.mapToDict(mapped_info))
+            return jsonify(Reactions=mapped_result)
+
+
+
+    def getMessageLikesCount(self, message_id):
+        dao = ReactionDAO()
+        dao1 = MessageDAO()
+        dao2 = UsersDAO()
+        result = dao.getLikesCountToMessageId(message_id) # returns count
+        if result == None:
+            return jsonify(Error="REACTION NOT FOUND")
+        else:
+            mapped_result = []
+            for r in result:
+                mapped_info = []
+                message = dao1.getMessageById(message_id)
+                mapped_info.append(message[1])  # message text in which it reacted
+                mapped_info.append(r[0]) #count
+                mapped_result.append(self.mapToDict2(mapped_info))
             return jsonify(Reaction=mapped_result)
+
+    def getMessageDislikesCount(self, message_id):
+        dao = ReactionDAO()
+        dao1 = MessageDAO()
+        dao2 = UsersDAO()
+        result = dao.getDislikesCountToMessageId(message_id) # returns count
+        if result == None:
+            return jsonify(Error="REACTION NOT FOUND")
+        else:
+            mapped_result = []
+            for r in result:
+                mapped_info = []
+                message = dao1.getMessageById(message_id)
+                mapped_info.append(message[1])  # message text in which it reacted
+                mapped_info.append(r[0]) # count
+                mapped_result.append(self.mapToDict3(mapped_info))
+            return jsonify(Reaction=mapped_result)
+

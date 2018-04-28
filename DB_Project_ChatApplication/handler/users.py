@@ -1,7 +1,6 @@
 from flask import jsonify
 from dao.users import UsersDAO
 
-
 class UsersHandler:
 
     def users_dict(self, row):
@@ -31,3 +30,12 @@ class UsersHandler:
          else:
              mapped_results = self.users_dict(result)
              return jsonify(User=mapped_results)
+
+    def getUserByName(self, first_name,last_name):
+        dao = UsersDAO()
+        result = dao.getUserByName(first_name,last_name)
+        if result == None:
+            return jsonify(Error="USER NOT FOUND")
+        else:
+            mapped_results = self.users_dict(result)
+            return jsonify(User=mapped_results)

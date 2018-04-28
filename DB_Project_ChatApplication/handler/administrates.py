@@ -1,24 +1,9 @@
-from flask import jsonify, request
-from dao.admin import AdminDAO
+from flask import jsonify
+from dao.administrates import AdministratesDAO
 from dao.users import UsersDAO
-from dao.chat import ChatDAO
+from dao.group_chat import Group_ChatDAO
 
 class AdminsHandler:
-    def getAllAdmins(self):
-        dao = AdminDAO()
-        dao1 = UsersDAO()
-        dao2 = ChatDAO()
-        result = dao.getAllAdmins()
-
-        mapped_result = []
-        for r in result:
-            result2 = dao1.getUserById(r[0])
-            result3 = dao2.getChatById(r[1])
-            r[0] = result2[1] + " " + result2[2]
-            r[1] = result3[1]
-            mapped_result.append(self.mapToDict(r))
-        return jsonify(Admins=mapped_result)
-
 
     def mapToDict(self, row):
         result = {}
@@ -26,40 +11,54 @@ class AdminsHandler:
         result['chat'] = row[1]
         return result
 
+    def getAllAdmins(self):
 
-    def getChatsAdministratedByUser(self, user_id):
-        dao = AdminDAO()
+        dao = AdministratesDAO()
         dao1 = UsersDAO()
-        dao2 = ChatDAO()
-        result = dao.getChatsAdministratedByUser(user_id)
+        dao2 = Group_ChatDAO()
+        result = dao.getAllAdmins()
+
+        mapped_result = []
+        for r in result:
+            result2 = dao1.getUserById(r[0])
+            result3 = dao2.getChatById(r[1])
+            name_chat = ['', '']
+            name_chat[0] = result2[1] + " " + result2[2]
+            name_chat[1] = result3[1]
+            mapped_result.append(self.mapToDict(name_chat))
+        return jsonify(Admins=mapped_result)
+
+    def getChatsAdministratedByUser(self, users_id):
+        dao = AdministratesDAO()
+        dao1 = UsersDAO()
+        dao2 = Group_ChatDAO()
+        result = dao.getChatsAdministratedByUser(users_id)
         if result == None:
             return jsonify(Error="CHAT NOT FOUND")
         else:
             mapped_result = []
             for r in result:
-                result2 = dao1.getUserById(r[0])
-                result3 = dao2.getChatById(r[1])
-                r[0] = result2[1] + " " + result2[2]
-                r[1] = result3[1]
-                mapped_result.append(self.mapToDict(r))
+                info = []
+                user = dao1.getUserById(r[0])
+                group = dao2.getChatById(r[1])
+                info.append(user[1] + " " + user[2]) # user name
+                info.append(group[1]) # group name
+                mapped_result.append(self.mapToDict(info))
             return jsonify(Admins=mapped_result)
 
-
-    def getAdminByChatID(self, chat_id):
-        dao = AdminDAO()
+    def getAdminOfChatID(self, group_id):
+        dao = AdministratesDAO()
         dao1 = UsersDAO()
-        dao2 = ChatDAO()
-        result = dao.getAdminsByChatID(chat_id)
-        # print(result)
+        dao2 = Group_ChatDAO()
+        result = dao.getAdminOfGroupID(group_id)
         if result == None:
-            return jsonify(Error="ADMIN NOT FOUND")
+            return jsonify(Error="GROUP NOT FOUND")
         else:
             mapped_result = []
-            for r in result:
-                result2 = dao1.getUserById(r[0])
-                result3 = dao2.getChatById(r[1])
-                r[0] = result2[1] + " " + result2[2]
-                r[1] = result3[1]
-                mapped_result.append(self.mapToDict(r))
+            info = []
+            user = dao1.getUserById(result[0])
+            group = dao2.getChatById(result[1])
+            info.append(user[1] + " " + user[2])  # user name
+            info.append(group[1])                 # group name
+            mapped_result.append(self.mapToDict(info))
             return jsonify(Admins=mapped_result)
-
