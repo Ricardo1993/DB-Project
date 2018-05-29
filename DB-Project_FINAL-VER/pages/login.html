@@ -1,0 +1,36 @@
+<div ng-cloak style="align-content: center">
+    <div class="row">
+        <!--<div ng-controller="ChatController">-->
+        <div class="col s12 m6">
+            <div class="card teal darken-1">
+                <div class="card-content ">
+                    <!--<div ng-controller="LoginController">-->
+                        <i class="material-icons prefix" style="color: white">mode_edit</i>
+                        <span text-white style="font-size:larger; color:white">First Name:</span>
+                        <i class="material-icons prefix" style="color: white; margin-left:210px">mode_edit</i>
+                        <span text-white style="font-size:larger; color:white">Last Name:</span>
+                         <textarea style="background: white; width: 275px" id="textarea1" class="materialize-textarea" ng-model="loginCtrl.firstName"></textarea> <textarea style="background: white; margin-left: 50px; width: 275px" id="textarea2" class="materialize-textarea" ng-model="loginCtrl.lastName"></textarea>
+                </div>
+                <div class="card-content ">
+                        <i class="material-icons prefix" style="color: white">mode_edit</i> <span text-white style="font-size:larger; color:white">Password:</span>
+                    <textarea style="background: white" id="textarea3" class="materialize-textarea" ng-model="loginCtrl.password"></textarea>
+                </div>
+
+                <div class="card-action white">
+                        <button class="btn waves-effect waves-light " type="submit" name="action" ng-click="loginCtrl.loginUser()">Log In
+                        <i class="material-icons right">send</i>
+                        </button>
+                        <button class="btn waves-effect waves-light " type="submit" name="action" style="margin-left:345px; width:115px" ng-click="loginCtrl.register()">
+                            Register
+                        <i class="material-icons right">reg</i>
+                        </button>
+
+
+                </div>
+
+            </div>
+        </div>
+        <!--</div>-->
+
+    </div>
+</div>
